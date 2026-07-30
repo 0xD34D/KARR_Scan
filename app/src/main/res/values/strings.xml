@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">KARR Scan</string>
+    <string name="location_permission_request_title">Background Location Recommended</string>
+    <string name="location_permission_request_text">Background location permission allows the app to provide your mobile GPS position when a device does not provide its own location in the telemetry data. This is especially useful when the app is running in the background.</string>
+    <string name="location_explanation_text">Location permission is used to provide mobile GPS fallback when a device does not provide location in its telemetry data. Without it, some devices may show unknown location.</string>
+    <string name="permission_confirm_button_text">Grant</string>
+    <string name="permission_dismiss_button_text">Dismiss</string>
+    <plurals name="device_count">
+        <item quantity="one">%d Unit</item>
+        <item quantity="other">%d Units</item>
+    </plurals>
+    <string name="system_header_title">KARR_SCAN_v1.0</string>
+    <string name="scanning_status_active">SCANNING_BLE...</string>
+    <string name="scanning_status_idle">SYSTEM_IDLE</string>
+    <string name="label_detected">DETECTED</string>
+    <string name="label_signal">SIGNAL</string>
+    <string name="rssi_unknown">-- dBm</string>
+    <string name="rssi_format">%d dBm</string>
+    <string name="button_stop_scanner">[ STOP SCANNER ]</string>
+    <string name="button_start_scanner">[ START SCANNER ]</string>
+    <string name="status_armed">ARMED</string>
+    <string name="status_disarmed">DISARMED</string>
+    <string name="label_voltage">VOLTAGE</string>
+    <string name="label_type">TYPE</string>
+    <string name="label_rssi">RSSI</string>
+    <string name="label_snow_mode">SNOW_MODE</string>
+    <string name="type_elite_pro">Elite Pro</string>
+    <string name="type_standard">Standard</string>
+    <string name="notification_title">KARR Scanner Active</string>
+    <string name="notification_text">Scanning for KARR devices in background...</string>
+    <string name="notification_channel_name">KARR Scanner Service Channel</string>
+    <string name="notification_action_stop">Stop Scanning</string>
+    <string name="vin_label">VIN: %1$s</string>
+    <string name="mac_label">MAC: %1$s</string>
+    <string name="voltage_format">%.2fV</string>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <group android:pivotX="54" android:pivotY="54" android:scaleX="0.65" android:scaleY="0.65">
+        <!-- Centered Car -->
+        <group android:translateX="30" android:translateY="32" android:scaleX="2" android:scaleY="2">
+        <path android:fillColor="#00FF41" android:pathData="M18.92,6.01C18.72,5.42 18.16,5 17.5,5H6.5c-0.66,0 -1.21,0.42 -1.42,1.01L3,12v8c0,0.55 0.45,1 1,1h1c0.55,0 1,-0.45 1,-1v-1h12v1c0,0.55 0.45,1 1,1h1c0.55,0 1,-0.45 1,-1v-8L18.92,6.01zM6.5,7h11l1.5,4.5h-14L6.5,7zM6.5,16C5.67,16 5,15.33 5,14.5S5.67,13 6.5,13S8,13.67 8,14.5S7.33,16 6.5,16zM17.5,16c-0.83,0 -1.5,-0.67 -1.5,-1.5S16.67,13 17.5,13S19,13.67 19,14.5S18.33,16 17.5,16z"/>
+    </group>
+
+    <!-- Radio Waves Left -->
+    <path android:pathData="M24,56 Q19,64 24,72" android:strokeColor="#00FF41" android:strokeWidth="3.5" android:strokeLineCap="round"/>
+    <path android:pathData="M16,51 Q9,64 16,77" android:strokeColor="#00FF41" android:strokeWidth="3.5" android:strokeLineCap="round"/>
+
+    <!-- Radio Waves Right -->
+    <path android:pathData="M84,56 Q89,64 84,72" android:strokeColor="#00FF41" android:strokeWidth="3.5" android:strokeLineCap="round"/>
+    <path android:pathData="M92,51 Q99,64 92,77" android:strokeColor="#00FF41" android:strokeWidth="3.5" android:strokeLineCap="round"/>
+
+    <!-- Magnifying Glass Hovering -->
+    <group android:translateX="42" android:translateY="12" android:scaleX="2.4" android:scaleY="2.4">
+        <!-- Opaque center to hide the car behind it -->
+        <path android:fillColor="#0A0A0A" android:pathData="M9.5,3 C13.09,3 16,5.91 16,9.5 C16,13.09 13.09,16 9.5,16 C5.91,16 3,13.09 3,9.5 C3,5.91 5.91,3 9.5,3 Z"/>
+        <!-- Magnifying glass frame -->
+        <path android:fillColor="#00FF41" android:pathData="M15.5,14h-0.79l-0.28,-0.27C15.41,12.59 16,11.11 16,9.5C16,5.91 13.09,3 9.5,3S3,5.91 3,9.5S5.91,16 9.5,16c1.61,0 3.09,-0.59 4.23,-1.57l0.27,0.28v0.79l5,4.99L20.49,19l-4.99,-5zM9.5,14C7.01,14 5,11.99 5,9.5S7.01,5 9.5,5S14,7.01 14,9.5S11.99,14 9.5,14z"/>
+    </group>
+    
+    <!-- Bounding/Targeting box for the "Hacker" vibe around the car -->
+    <path android:pathData="M25,35 L20,35 L20,40" android:strokeColor="#008F11" android:strokeWidth="2"/>
+    <path android:pathData="M83,35 L88,35 L88,40" android:strokeColor="#008F11" android:strokeWidth="2"/>
+    <path android:pathData="M25,93 L20,93 L20,88" android:strokeColor="#008F11" android:strokeWidth="2"/>
+    <path android:pathData="M83,93 L88,93 L88,88" android:strokeColor="#008F11" android:strokeWidth="2"/>
+    </group>
+</vector>

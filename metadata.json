@@ -1,0 +1,6 @@
+{
+  "name": "KARR Scanner",
+  "description": "Scans and detects vehicles with a KARR alarm system using BLE.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
