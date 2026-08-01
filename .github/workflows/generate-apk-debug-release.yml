@@ -18,12 +18,15 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6 # Automatically saves/restores the configuration cache
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       # Create APK Release
       - name: Build apk release project (APK)
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --configuration-cache
 
       - name: Sign app APK
         uses: r0adkll/sign-android-release@v1
