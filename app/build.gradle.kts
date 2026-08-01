@@ -1,4 +1,7 @@
 import com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 plugins {
   alias(libs.plugins.android.application)
@@ -7,6 +10,11 @@ plugins {
   alias(libs.plugins.roborazzi)
   alias(libs.plugins.secrets)
   alias(libs.plugins.google.services)
+}
+
+fun getFormattedDate(): String {
+  val dateFormat = SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault())
+  return dateFormat.format(Date())
 }
 
 android {
@@ -18,7 +26,10 @@ android {
     minSdk = 24
     targetSdk = 36
     versionCode = 1
-    versionName = "1.0"
+    val versionMajor = 1
+    val versionMinor = 0
+    versionName = "${versionMajor}.${versionMinor}_${getFormattedDate()}"
+    base.archivesName.set("${namespace}-${versionName}")
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
