@@ -7,7 +7,7 @@
 ### Disclaimer #1
 ---
 This app was developed with the assistance of AI.  I've done my fair share of Android development
-in the past, and I spent enough time figuring out how this all worked aso I wanted a fast way to
+in the past, and I spent enough time figuring out how this all worked so I wanted a fast way to
 test those findings.  The blabbering in this README, however, is mine and mine alone.
 
 ### Disclaimer #2
