@@ -19,7 +19,8 @@ data class ParsedBleDevice(
     val longitude: Double?,
     val isDebugMode: Boolean,
     val isEncrypted: Boolean,
-    val timestamp: Long
+    val firstSeen: Long,
+    val lastSeen: Long
 )
 
 object BlePayloadParser {
@@ -142,6 +143,7 @@ object BlePayloadParser {
         
         Log.d("BlePayloadParser", "Parsing successful for MAC: $macAddress, Unit Type: $unitTypeIndex, Mode: $modeIndex")
 
+        val now = System.currentTimeMillis()
         return ParsedBleDevice(
             macAddress = macAddress,
             name = name,
@@ -157,7 +159,8 @@ object BlePayloadParser {
             longitude = longitude,
             isDebugMode = isDebugMode,
             isEncrypted = isEncrypted,
-            timestamp = System.currentTimeMillis()
+            firstSeen = now,
+            lastSeen = now
         )
     }
 }

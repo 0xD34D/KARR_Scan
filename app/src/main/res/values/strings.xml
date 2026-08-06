@@ -33,4 +33,12 @@
     <string name="vin_label">VIN: %1$s</string>
     <string name="mac_label">MAC: %1$s</string>
     <string name="voltage_format">%.2fV</string>
+
+    <string name="tab_scanner">SCANNER</string>
+    <string name="tab_history">HISTORY</string>
+    <string name="label_first_seen">FIRST_SEEN</string>
+    <string name="label_last_seen">LAST_SEEN</string>
+    <string name="button_clear_history">[ CLEAR_HISTORY ]</string>
+    <string name="dialog_clear_history_title">Clear Detection History?</string>
+    <string name="dialog_clear_history_text">This will permanently delete all saved device detections from your history. This action cannot be undone.</string>
 </resources>

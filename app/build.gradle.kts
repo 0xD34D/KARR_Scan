@@ -27,7 +27,7 @@ android {
     targetSdk = 36
     versionCode = 1
     val versionMajor = 1
-    val versionMinor = 0
+    val versionMinor = 1
     versionName = "${versionMajor}.${versionMinor}_${getFormattedDate()}"
     base.archivesName.set("${namespace}-${versionName}")
 

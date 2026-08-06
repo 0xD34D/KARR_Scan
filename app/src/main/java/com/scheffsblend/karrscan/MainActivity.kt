@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +60,13 @@ class ScannerViewModel : ViewModel() {
 
     val devices: StateFlow<List<ParsedBleDevice>> = BleDeviceRepository.devices
 
+    val history = BleDeviceRepository.history
+
     var locationInfoDismissed by mutableStateOf(false)
+
+    fun clearHistory() {
+        BleDeviceRepository.clearHistory()
+    }
 }
 
 class MainActivity : ComponentActivity() {
@@ -122,6 +129,10 @@ fun ScannerScreen(
 ) {
     val isScanning by viewModel.isScanning.collectAsState()
     val devices by viewModel.devices.collectAsState()
+    val history by viewModel.history.collectAsState(initial = emptyList())
+
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val tabs = listOf(stringResource(R.string.tab_scanner), stringResource(R.string.tab_history))
 
     val mandatoryPermissions = remember {
         mutableListOf<String>().apply {
@@ -150,6 +161,7 @@ fun ScannerScreen(
     }
 
     var showBackgroundRationale by remember { mutableStateOf(false) }
+    var showClearHistoryDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (!mandatoryPermissionState.allPermissionsGranted) {
@@ -161,7 +173,7 @@ fun ScannerScreen(
         AlertDialog(
             onDismissRequest = { 
                 showBackgroundRationale = false
-                onStartScan() // Start anyway if they dismiss
+                onStartScan()
             },
             title = { Text(stringResource(R.string.location_permission_request_title)) },
             text = { Text(stringResource(R.string.location_permission_request_text))  },
@@ -176,8 +188,33 @@ fun ScannerScreen(
             dismissButton = {
                 TextButton(onClick = { 
                     showBackgroundRationale = false
-                    onStartScan() // Start anyway if they dismiss
+                    onStartScan()
                 }) {
+                    Text(stringResource(R.string.permission_dismiss_button_text))
+                }
+            },
+            shape = RectangleShape,
+            containerColor = SurfaceDark,
+            titleContentColor = PrimaryLight,
+            textContentColor = TextSecondary
+        )
+    }
+
+    if (showClearHistoryDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearHistoryDialog = false },
+            title = { Text(stringResource(R.string.dialog_clear_history_title)) },
+            text = { Text(stringResource(R.string.dialog_clear_history_text)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.clearHistory()
+                    showClearHistoryDialog = false
+                }) {
+                    Text(stringResource(R.string.permission_confirm_button_text), color = Red400)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearHistoryDialog = false }) {
                     Text(stringResource(R.string.permission_dismiss_button_text))
                 }
             },
@@ -193,6 +230,75 @@ fun ScannerScreen(
             .fillMaxSize()
             .background(BgDark)
     ) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = BgDark,
+            contentColor = PrimaryLight,
+            indicator = { tabPositions ->
+                TabRowDefaults.SecondaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    color = PrimaryLight
+                )
+            },
+            divider = {
+                HorizontalDivider(color = PrimaryDark, thickness = 1.dp)
+            }
+        ) {
+            tabs.forEachIndexed { index, title ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = { selectedTabIndex = index },
+                    text = {
+                        Text(
+                            text = title,
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                )
+            }
+        }
+
+        when (selectedTabIndex) {
+            0 -> ScannerTabContent(
+                isScanning = isScanning,
+                devices = devices,
+                isLocationGranted = isLocationGranted,
+                locationInfoDismissed = viewModel.locationInfoDismissed,
+                onDismissLocationInfo = { viewModel.locationInfoDismissed = true },
+                onGrantLocation = { locationPermissionState.launchMultiplePermissionRequest() },
+                onStartScan = {
+                    if (isLocationGranted &&
+                        backgroundPermissionState != null &&
+                        !backgroundPermissionState.status.isGranted) {
+                        showBackgroundRationale = true
+                    } else {
+                        onStartScan()
+                    }
+                },
+                onStopScan = onStopScan
+            )
+            1 -> HistoryTabContent(
+                history = history,
+                onClearHistory = { showClearHistoryDialog = true }
+            )
+        }
+    }
+}
+
+@Composable
+fun ScannerTabContent(
+    isScanning: Boolean,
+    devices: List<ParsedBleDevice>,
+    isLocationGranted: Boolean,
+    locationInfoDismissed: Boolean,
+    onDismissLocationInfo: () -> Unit,
+    onGrantLocation: () -> Unit,
+    onStartScan: () -> Unit,
+    onStopScan: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
         // Header Section
         Row(
             modifier = Modifier
@@ -253,14 +359,15 @@ fun ScannerScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (isScanning) {
-                    val infiniteTransition = rememberInfiniteTransition()
+                    val infiniteTransition = rememberInfiniteTransition(label = "spinner")
                     val frame by infiniteTransition.animateFloat(
                         initialValue = 0f,
                         targetValue = 4f,
                         animationSpec = infiniteRepeatable(
                             animation = tween(1000, easing = LinearEasing),
                             repeatMode = RepeatMode.Restart
-                        )
+                        ),
+                        label = "frame"
                     )
                     val spinnerChars = listOf("|", "/", "—", "\\")
                     Text(
@@ -332,7 +439,7 @@ fun ScannerScreen(
         }
 
         // Location Info Banner
-        if (!isLocationGranted && !viewModel.locationInfoDismissed) {
+        if (!isLocationGranted && !locationInfoDismissed) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -364,7 +471,7 @@ fun ScannerScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextButton(
-                            onClick = { viewModel.locationInfoDismissed = true },
+                            onClick = onDismissLocationInfo,
                             contentPadding = PaddingValues(horizontal = 8.dp)
                         ) {
                             Text(
@@ -377,7 +484,7 @@ fun ScannerScreen(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         TextButton(
-                            onClick = { locationPermissionState.launchMultiplePermissionRequest() },
+                            onClick = onGrantLocation,
                             contentPadding = PaddingValues(horizontal = 8.dp)
                         ) {
                             Text(
@@ -417,19 +524,7 @@ fun ScannerScreen(
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = { 
-                    if (isScanning) {
-                        onStopScan()
-                    } else {
-                        if (isLocationGranted && 
-                            backgroundPermissionState != null && 
-                            !backgroundPermissionState.status.isGranted) {
-                            showBackgroundRationale = true
-                        } else {
-                            onStartScan()
-                        }
-                    }
-                },
+                onClick = { if (isScanning) onStopScan() else onStartScan() },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(56.dp)
@@ -447,6 +542,58 @@ fun ScannerScreen(
                     fontFamily = FontFamily.Monospace,
                     letterSpacing = 1.sp
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun HistoryTabContent(
+    history: List<ParsedBleDevice>,
+    onClearHistory: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Summary Row
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = pluralStringResource(R.plurals.device_count, history.size, history.size),
+                color = PrimaryLight,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold
+            )
+
+            TextButton(
+                onClick = onClearHistory,
+                contentPadding = PaddingValues(horizontal = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.button_clear_history),
+                    color = Red400,
+                    fontSize = 12.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        // List
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(history, key = { it.macAddress }) { device ->
+                DeviceItem(device)
             }
         }
     }
@@ -569,7 +716,7 @@ fun DeviceItem(device: ParsedBleDevice) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = timestampFormatter.format(Date(device.timestamp)),
+                text = timestampFormatter.format(Date(device.lastSeen)),
                 color = TextSecondary.copy(alpha = 0.7f),
                 fontSize = 8.sp,
                 fontFamily = FontFamily.Monospace
