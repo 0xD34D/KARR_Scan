@@ -1,6 +1,12 @@
 name: Generated APK (Upload - Create Artifact To Github Action)
 
-on: push
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
