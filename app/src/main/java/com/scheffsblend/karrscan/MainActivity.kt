@@ -680,7 +680,7 @@ fun DeviceItem(device: ParsedBleDevice) {
             Text(text = "|", color = PrimaryDark, fontSize = 10.sp)
 
             Text(
-                text = if (device.isEliteMode) "ELITE" else "STD",
+                text = EnumQtMode.fromCode(device.modeIndex).name.uppercase(),
                 color = PrimaryLight,
                 fontSize = 10.sp,
                 fontFamily = FontFamily.Monospace

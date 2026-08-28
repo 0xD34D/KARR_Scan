@@ -23,6 +23,21 @@ data class ParsedBleDevice(
     val lastSeen: Long
 )
 
+enum class EnumQtMode(val code: Int) {
+    Installer(0),
+    Dealer(1),
+    User(2),
+    No_Sale(3),
+    BCA(4),
+    Valet(5),
+    Bootload(6),
+    Unset(7);
+
+    companion object {
+        fun fromCode(code: Int): EnumQtMode = entries.find { it.code == code } ?: Unset
+    }
+}
+
 object BlePayloadParser {
 
     private val REGEX_ALPHA_NUM = Pattern.compile("^[A-F0-9]$")
