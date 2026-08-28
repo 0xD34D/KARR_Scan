@@ -9,7 +9,7 @@
         <item quantity="one">%d Unit</item>
         <item quantity="other">%d Units</item>
     </plurals>
-    <string name="system_header_title">KARR_SCAN_v1.0</string>
+    <string name="system_header_title">KARR_SCAN</string>
     <string name="scanning_status_active">SCANNING_BLE...</string>
     <string name="scanning_status_idle">SYSTEM_IDLE</string>
     <string name="label_detected">DETECTED</string>
