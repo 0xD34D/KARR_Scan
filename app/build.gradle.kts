@@ -25,9 +25,9 @@ android {
     applicationId = "com.scheffsblend.karrscan"
     minSdk = 24
     targetSdk = 36
-    versionCode = 1
+    versionCode = 3
     val versionMajor = 1
-    val versionMinor = 1
+    val versionMinor = 2
     versionName = "${versionMajor}.${versionMinor}_${getFormattedDate()}"
     base.archivesName.set("${namespace}-${versionName}")
 
